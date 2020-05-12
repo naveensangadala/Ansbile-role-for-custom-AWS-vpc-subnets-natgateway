@@ -1,0 +1,15 @@
+    - name: Create Database server Intsance
+      ec2:
+         group: "{{ db_security_group_name }}"
+         instance_type: "{{instancetype}}"
+         image: "{{AMI}}"
+         region: "{{region_name}}"
+         wait: true
+         exact_count: "{{number}}"
+         count_tag:
+           Name: "{{IAM_groupname}}"
+         vpc_subnet_id: "{{ vpc_subnet_id }}"
+         key_name: "{{keypair_name}}"
+         group_id: "{{ privatesg.group_id }}"
+      register: ec2_db
+

@@ -1,0 +1,23 @@
+    - name: Create a new ec2 key
+      ec2_key:
+          name: key-test
+          region: "{{ region_name }}"
+      register: ec2_key_result
+
+    - debug:
+        msg: "my aws key is: {{ec2_key_result.key.name}}"
+
+    - name: save the private key
+      copy: content="{{ ec2_key_result.key.private_key }}" dest="./test-key.pem" mode=0600
+      when: ec2_key_result.changed
+
+    - name: create VPC
+      ec2_vpc_net:
+        name: "{{ vpc_name }}"
+        state: present
+        region: "{{ region_name }}"
+        cidr_block: "{{ vpccidr }}"
+      register: vpcid
+
+    - debug:
+        msg: "vpc id is: {{vpcid.vpc.id}}"

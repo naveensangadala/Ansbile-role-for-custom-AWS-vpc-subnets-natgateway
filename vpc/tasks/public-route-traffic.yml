@@ -1,0 +1,44 @@
+    - name: route IGW
+      ec2_vpc_route_table:
+        vpc_id: "{{ vpc_id }}"
+        region: "{{ region_name }}"
+        subnets: "{{ public_subnet_id }}" 
+        routes:
+          - dest: 0.0.0.0/0
+            gateway_id: "{{ igw_id }}"
+      register: publicigw
+
+    - name: creating NAT Gateway
+      ec2_vpc_nat_gateway:
+        state: 'present'
+        subnet_id: "{{ publicsubnet.subnet.id }}"
+        wait:  yes
+        region: "{{ region_name }}"
+        if_exist_do_not_create: true
+        release_eip:  true
+      register: result_nat_gateway
+
+    #update the CIDR address in the SSH port section
+    - name: Create security group
+      ec2_group:
+        name: "{{ security_group_name_for_app_server }}"
+        description: App-Server security group
+        vpc_id: "{{ vpc_id }}"
+        region: "{{ region_name }}"
+        rules:
+          - proto: tcp
+            ports:
+            - 80
+            cidr_ip: 0.0.0.0/0
+          - proto: tcp
+            ports:
+            - 22
+            cidr_ip: 0.0.0.0/0
+          - proto: tcp
+            ports:
+            - 443
+            cidr_ip: 0.0.0.0/0
+      register: publicsg
+    - debug: 
+        msg: "security group id of public subnet is: {{publicsg.group_id}}"
+

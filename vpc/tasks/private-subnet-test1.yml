@@ -1,0 +1,37 @@
+    - name: associate subnet to the VPC
+      ec2_vpc_subnet:
+        state: present
+        vpc_id: "{{ vpc_id }}"
+        region: "{{ region_name }}"
+        cidr: "{{ private_subnet_cidr }}"
+      register: privatesubnet
+
+    - debug:
+         msg: "private subnet id is: {{privatesubnet.subnet.id}}i"
+
+    - name : Set up private subnet route table
+      ec2_vpc_route_table:
+         vpc_id:         "{{ vpcid.vpc.id }}"
+         region:           "{{ region_name }}"
+         subnets:          "{{ privatesubnet.subnet.id }}"
+         routes:
+           - dest:         '0.0.0.0/0'
+             gateway_id:   "{{ result_nat_gateway.nat_gateway_id }}"
+      register: result_private_route
+
+    - name: Create security group
+      ec2_group:
+        name: "{{ db_security_group_name }}"
+        description: security group for db servers
+        vpc_id: "{{ vpc_id }}"
+        region: "{{ region_name }}"
+        rules:
+          - proto: tcp
+            ports:
+            - 22
+            cidr_ip: 0.0.0.0/0
+      register: privatesg
+
+    - debug:
+         msg: "security group id for private subnet is: {{privatesg.group_id}}"
+

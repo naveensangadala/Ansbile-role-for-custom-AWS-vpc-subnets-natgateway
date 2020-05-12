@@ -1,0 +1,14 @@
+    - name: associate subnet to the VPC
+      ec2_vpc_subnet:
+        state: present
+        vpc_id: "{{ vpc_id }}"
+        region: "{{ region_name }}"
+        cidr: "{{ public_subnet_cidr }}"
+        map_public: yes
+      register: publicsubnet
+    - name: create IGW
+      ec2_vpc_igw:
+        vpc_id: "{{ vpc_id }}"
+        region: "{{ region_name }}"
+        state: "present"
+      register: publicigw

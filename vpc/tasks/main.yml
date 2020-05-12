@@ -1,0 +1,32 @@
+---
+- name: creating vpc
+  import_tasks: vpc.yml
+  
+- name: creating public-subnet
+  import_tasks: public-subnet.yml
+  vars:
+     vpc_id: "{{vpcid.vpc.id}}"
+
+- name: creating public-route-traffic
+  import_tasks: public-route-traffic.yml
+  vars:
+    vpc_id: "{{vpcid.vpc.id}}"
+    igw_id: "{{publicigw.gateway_id}}"
+    public_subnet_id: "{{publicsubnet.subnet.id}}"
+
+- name: creating app server
+  import_tasks: app-ec2.yml
+  vars:
+    vpc_subnet_id: "{{publicsubnet.subnet.id}}"
+    group_id: "{{publicsg.group_id}}"
+
+- name: creating private-subnet
+  import_tasks: private-subnet-test1.yml
+  vars:
+    vpc_id: "{{vpcid.vpc.id}}"
+
+- name: creating db server 
+  import_tasks: db-ec2.yml
+  vars:
+    vpc_subnet_id: "{{privatesubnet.subnet.id}}"
+    group_id: "{{privatesg.group_id}}"
