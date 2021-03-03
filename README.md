@@ -13,7 +13,7 @@ Creating a Private subnet with Routetable and associate with NAT gateway , CIDR:
 
 ansibe role  execution
 
-ansible-playbook vpc.yml --extra-vars "vpc_name=custom-vpc"
+ansible-playbook vpc-role.yml --extra-vars "vpc_name=custom-vpc"
 
 ======
 
