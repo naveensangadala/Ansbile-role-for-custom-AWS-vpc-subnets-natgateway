@@ -20,7 +20,11 @@ ansible-playbook vpc-role.yml --extra-vars "vpc_name=custom-vpc"
 Note: once the APP and DB instances are launched, SSH to APP instance and then SSH to DB instance by using your .pem key. 
 once you logged in to the DB instance , check whether its accessing the internet
 
-ssh ec2-user@DB-server -i yourkey.pem
+Note: .pem key should be present in your APP server /home/ec2-user and with the permissions of .pem key should be 400
+
+chmod 400 xx.pem
+
+ssh -i yourkey.pem ec2-user@DB-server
 
 once this step is done , then try to execute the below steps to enable the passowrdless authentication between APP and DB servers by generating SSH keys between the two servers by using the below steps
 
