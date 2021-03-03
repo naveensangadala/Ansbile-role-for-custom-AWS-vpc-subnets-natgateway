@@ -3,7 +3,7 @@ Ansible Role for  creating AWS custom VPC, Subnets, Nat gateway, App and DB inst
 
 ======
 
-This Repository is for creating AWS custom VPC with public and private subnets and launching an NAT gatway in the public subnet to provide internet access to the private subnet instances by using Ansible role called vpc.
+This Repository is for creating AWS custom VPC with public and private subnets and launching the NAT gatway in the public subnet to provide internet access to the private subnet instances by using Ansible role called vpc.
 
 Creating a VPC , CIDR: 10.22.0.0/16
 Creating a Public subnet , CIDR: 10.22.0.0/24
