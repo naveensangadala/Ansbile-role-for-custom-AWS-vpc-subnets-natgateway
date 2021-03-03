@@ -17,9 +17,8 @@ ansible-playbook vpc.yml --extra-vars "vpc_name=custom-vpc"
 
 ======
 
-Note: once the APP and DB instances were launched
-
-ssh to APP instance and then , SSH to DB instance by using your .pem key. once you logged in to the DB instance , check whether its accessing the internet
+Note: once the APP and DB instances are launched, SSH to APP instance and then SSH to DB instance by using your .pem key. 
+once you logged in to the DB instance , check whether its accessing the internet
 
 ssh ec2-user@DB-server -i yourkey.pem
 
